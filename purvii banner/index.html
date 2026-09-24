@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Stackly</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg-deep:#0a0620;
+    --bg-mid:#160b30;
+    --purple:#8b5cf6;
+    --purple-light:#c4a4ff;
+    --text:#eef0ff;
+    --muted:#b7b3d6;
+    box-sizing:border-box;
+  }
+  *{box-sizing:inherit;margin:0;padding:0;}
+  html,body{
+    height:100%;
+    font-family:'Poppins',sans-serif;
+    background:var(--bg-deep);
+    color:var(--text);
+    overflow-x:hidden;
+  }
+
+  .sky{
+    position:relative;
+    min-height:100vh;
+    padding:20px 20px 60px;
+    background:
+      radial-gradient(ellipse 900px 500px at 15% 75%, rgba(60,110,190,0.35), transparent 60%),
+      radial-gradient(ellipse 700px 500px at 85% 30%, rgba(120,60,200,0.35), transparent 60%),
+      radial-gradient(1200px 800px at 50% 0%, #241249, transparent 55%),
+      linear-gradient(180deg,#0d0722 0%, #150a30 45%, #0a0620 100%);
+  }
+
+  /* Stars */
+  .stars, .stars2{
+    position:absolute; inset:0;
+    background-repeat:repeat;
+    pointer-events:none;
+  }
+  .stars{
+    background-image:
+      radial-gradient(1.5px 1.5px at 20px 30px, #fff, transparent),
+      radial-gradient(1px 1px at 90px 80px, #fff, transparent),
+      radial-gradient(1.5px 1.5px at 160px 50px, #fff, transparent),
+      radial-gradient(1px 1px at 210px 120px, #fff, transparent),
+      radial-gradient(1px 1px at 260px 20px, #fff, transparent),
+      radial-gradient(1.5px 1.5px at 320px 90px, #fff, transparent);
+    background-size: 380px 200px;
+    opacity:0.8;
+  }
+  .stars2{
+    background-image:
+      radial-gradient(1px 1px at 50px 150px, #cbd, transparent),
+      radial-gradient(1px 1px at 130px 40px, #cbd, transparent),
+      radial-gradient(1.5px 1.5px at 190px 170px, #cbd, transparent),
+      radial-gradient(1px 1px at 300px 60px, #cbd, transparent);
+    background-size: 340px 260px;
+    opacity:0.5;
+  }
+
+  /* Navbar */
+  nav{
+    position:relative;
+    z-index:5;
+    max-width:1180px;
+    margin:0 auto;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:16px 30px;
+    background:rgba(255,255,255,0.04);
+    border:1px solid rgba(255,255,255,0.08);
+    border-radius:999px;
+    backdrop-filter:blur(6px);
+  }
+  .logo{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    font-weight:800;
+    font-size:20px;
+    letter-spacing:0.5px;
+  }
+  .logo-icon{
+    width:28px;height:28px;
+    border-radius:8px;
+    background:linear-gradient(135deg,#4facfe,#8b5cf6);
+    display:flex;align-items:center;justify-content:center;
+    font-size:14px;
+  }
+  .nav-links{
+    display:flex;
+    gap:34px;
+    list-style:none;
+  }
+  .nav-links a{
+    color:var(--muted);
+    text-decoration:none;
+    font-size:15px;
+    font-weight:500;
+    position:relative;
+    padding-bottom:6px;
+  }
+  .nav-links a.active{ color:#fff; }
+  .nav-links a.active::after{
+    content:"";
+    position:absolute;
+    left:0; right:0; bottom:0;
+    height:2px;
+    background:linear-gradient(90deg,#4facfe,#8b5cf6);
+    border-radius:2px;
+  }
+
+  /* Hero */
+  .hero{
+    position:relative;
+    z-index:3;
+    min-height:78vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+
+  .card{
+    position:relative;
+    z-index:4;
+    max-width:460px;
+    width:100%;
+    text-align:center;
+    padding:44px 40px;
+    border-radius:22px;
+    background:rgba(20,14,45,0.55);
+    border:1px solid rgba(255,255,255,0.08);
+    box-shadow:0 0 60px rgba(120,80,220,0.18);
+    backdrop-filter:blur(4px);
+  }
+  .badge{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    padding:7px 16px;
+    border-radius:999px;
+    background:rgba(255,255,255,0.06);
+    border:1px solid rgba(255,255,255,0.12);
+    font-size:13px;
+    font-weight:500;
+    color:var(--muted);
+    margin-bottom:22px;
+  }
+  .badge .dot{
+    width:8px;height:8px;border-radius:50%;
+    background:#38bdf8;
+    box-shadow:0 0 8px #38bdf8;
+  }
+  h1{
+    font-size:38px;
+    font-weight:700;
+    line-height:1.25;
+    margin-bottom:16px;
+  }
+  h1 span{
+    background:linear-gradient(90deg,#a78bfa,#f0abfc);
+    -webkit-background-clip:text;
+    background-clip:text;
+    color:transparent;
+  }
+  .card p{
+    color:var(--muted);
+    font-size:15px;
+    margin-bottom:28px;
+  }
+  .btn{
+    display:inline-flex;
+    align-items:center;
+    gap:10px;
+    padding:14px 30px;
+    border-radius:999px;
+    border:none;
+    background:linear-gradient(90deg,#7c3aed,#c084fc);
+    color:#fff;
+    font-weight:600;
+    font-size:15px;
+    cursor:pointer;
+    box-shadow:0 8px 24px rgba(140,80,240,0.45);
+    margin-bottom:18px;
+  }
+  .btn:hover{ filter:brightness(1.08); }
+  .pill{
+    display:inline-block;
+    padding:7px 18px;
+    border-radius:999px;
+    background:rgba(255,255,255,0.05);
+    border:1px solid rgba(255,255,255,0.1);
+    color:var(--muted);
+    font-size:13px;
+    font-weight:500;
+  }
+
+  /* Path connecting astronaut & rocket */
+  .path-svg{
+    position:absolute;
+    left:0; right:0;
+    bottom:16%;
+    width:100%;
+    height:220px;
+    z-index:2;
+    pointer-events:none;
+  }
+
+  .astronaut, .rocket{
+    position:absolute;
+    z-index:3;
+    filter:drop-shadow(0 10px 25px rgba(0,0,0,0.5));
+  }
+  .astronaut{
+    left:2%;
+    bottom:8%;
+    width:190px;
+    animation:float-astro 6s ease-in-out infinite;
+  }
+  .rocket{
+    right:2%;
+    bottom:2%;
+    width:230px;
+    animation:float-rocket 5s ease-in-out infinite;
+  }
+  @keyframes float-astro{
+    0%,100%{ transform:translateY(0) rotate(-2deg); }
+    50%{ transform:translateY(-14px) rotate(2deg); }
+  }
+  @keyframes float-rocket{
+    0%,100%{ transform:translateY(0) rotate(3deg); }
+    50%{ transform:translateY(-10px) rotate(6deg); }
+  }
+
+  @media (max-width:900px){
+    .astronaut{ width:110px; left:0; }
+    .rocket{ width:140px; right:0; }
+    h1{ font-size:28px; }
+    .card{ padding:30px 22px; }
+    .nav-links{ gap:16px; font-size:13px; }
+  }
+  @media (max-width:600px){
+    .astronaut, .rocket{ display:none; }
+  }
+</style>
+</head>
+<body>
+<div class="sky">
+  <div class="stars"></div>
+  <div class="stars2"></div>
+
+  <nav>
+    <div class="logo">
+      <div class="logo-icon">🚀</div>
+      STACKLY
+    </div>
+    <ul class="nav-links">
+      <li><a href="#" class="active">Home</a></li>
+      <li><a href="#">About</a></li>
+      <li><a href="#">Services</a></li>
+      <li><a href="#">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- dotted connecting path -->
+  <svg class="path-svg" viewBox="0 0 1600 220" preserveAspectRatio="none">
+    <path d="M 120 60 Q 800 220 1480 40" fill="none" stroke="rgba(255,255,255,0.55)"
+          stroke-width="2" stroke-dasharray="2 10" stroke-linecap="round"/>
+  </svg>
+
+  <!-- Astronaut -->
+  <svg class="astronaut" viewBox="0 0 200 260" xmlns="http://www.w3.org/2000/svg">
+    <ellipse cx="60" cy="230" rx="60" ry="30" fill="#3b6ea6" opacity="0.35"/>
+    <rect x="60" y="120" width="16" height="60" rx="8" fill="#e8ecf3"/>
+    <rect x="120" y="120" width="16" height="60" rx="8" fill="#e8ecf3"/>
+    <rect x="55" y="175" width="26" height="14" rx="6" fill="#cfd6e3"/>
+    <rect x="115" y="175" width="26" height="14" rx="6" fill="#cfd6e3"/>
+    <rect x="60" y="70" width="76" height="80" rx="24" fill="#f2f4f8"/>
+    <circle cx="55" cy="95" r="18" fill="#f2f4f8"/>
+    <circle cx="141" cy="95" r="18" fill="#f2f4f8"/>
+    <rect x="82" y="95" width="34" height="24" rx="10" fill="#3b6ea6"/>
+    <circle cx="98" cy="60" r="34" fill="#eef1f6" stroke="#c7cfdc" stroke-width="2"/>
+    <circle cx="98" cy="60" r="24" fill="#3b6ea6"/>
+    <circle cx="90" cy="53" r="6" fill="#fff" opacity="0.7"/>
+  </svg>
+
+  <!-- Rocket -->
+  <svg class="rocket" viewBox="0 0 220 340" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <linearGradient id="flame" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#c9f4ff"/>
+        <stop offset="60%" stop-color="#4fc3f7"/>
+        <stop offset="100%" stop-color="#7c3aed" stop-opacity="0"/>
+      </linearGradient>
+      <linearGradient id="body" x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0%" stop-color="#dfe4ec"/>
+        <stop offset="100%" stop-color="#aeb7c7"/>
+      </linearGradient>
+    </defs>
+    <polygon points="110,10 140,120 80,120" fill="#5b21b6"/>
+    <rect x="80" y="115" width="60" height="140" rx="26" fill="url(#body)"/>
+    <circle cx="110" cy="165" r="16" fill="#2b6fb3" stroke="#0d3a63" stroke-width="4"/>
+    <circle cx="110" cy="165" r="7" fill="#bfe4ff"/>
+    <polygon points="80,190 45,250 80,235" fill="#5b21b6"/>
+    <polygon points="140,190 175,250 140,235" fill="#5b21b6"/>
+    <polygon points="90,255 130,255 118,270 102,270" fill="#1e293b"/>
+    <ellipse cx="110" cy="285" rx="20" ry="50" fill="url(#flame)"/>
+  </svg>
+
+  <div class="hero">
+    <div class="card">
+      <div class="badge"><span class="dot"></span>Special Promotion</div>
+      <h1>Summer Sale is <span>Live!</span></h1>
+      <p>Get up to 50% off on all items. Limited time offer!</p>
+      <br>
+      <button class="btn">Shop Now &rarr;</button>
+      <br>
+      <span class="pill">Special Promotion</span>
+    </div>
+  </div>
+</div>
+</body>
+</html>
